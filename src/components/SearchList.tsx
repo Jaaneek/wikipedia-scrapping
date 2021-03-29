@@ -87,13 +87,14 @@ const SearchList: React.FC = () => {
   }, [data]);
 
   useEffect(() => {
-    toast({
-      title: 'Error!',
-      description: 'Something went wrong, try again later.',
-      status: 'error',
-      duration: 9000,
-      isClosable: true,
-    });
+    error &&
+      toast({
+        title: 'Error!',
+        description: 'Something went wrong, try again later.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
     //eslint-disable-next-line
   }, [error]);
 
