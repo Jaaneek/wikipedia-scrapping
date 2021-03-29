@@ -72,7 +72,7 @@ const SearchList: React.FC = () => {
     //eslint-disable-next-line
   }, []);
 
-  const throttledValue = useThrottleFn((value: string) => value, 3000, [phrase]);
+  const throttledValue = useThrottleFn((value: string) => value, 300, [phrase]);
   useEffect(
     () => {
       refetch();
