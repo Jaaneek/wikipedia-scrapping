@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { useThrottleFn } from 'react-use';
 import * as SharedTypes from 'shared/types';
 import * as R from 'ramda';
-//eslint-disable-next-line
+//@ts-ignore
 import SanitizedHTML from 'react-sanitized-html';
 import axios from 'axios';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
@@ -36,10 +36,20 @@ const SearchList: React.FC = () => {
   const [searchResults, setSearchResults] = useState<SharedTypes.SearchResult[]>([]);
 
   const replaceFirst = () => {
+    const foundArray = searchResults
+      .map((el, ind) => ({
+        index: ind,
+        isFound: el.snippet.search(new RegExp(phrase, 'i')) >= 0,
+      }))
+      .find((el) => el.isFound);
     setSearchResults(
       searchResults.map((el, index) => {
-        if (index === 0) {
-          const replacedSnippet = R.replace(new RegExp(phrase, 'i'), replaceWith, searchResults[0].snippet);
+        if (index === foundArray?.index) {
+          const replacedSnippet = R.replace(
+            new RegExp(phrase, 'i'),
+            replaceWith,
+            searchResults[foundArray.index].snippet
+          );
 
           return { ...el, snippet: replacedSnippet };
         }
@@ -90,6 +100,7 @@ const SearchList: React.FC = () => {
   return (
     <Box p={4}>
       <Button
+        mr={4}
         onClick={() => {
           refetch();
         }}
@@ -97,6 +108,7 @@ const SearchList: React.FC = () => {
         Search
       </Button>
       <Button
+        mr={4}
         onClick={() => {
           replaceFirst();
         }}
